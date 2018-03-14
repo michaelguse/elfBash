@@ -55,9 +55,12 @@ read -p "Please enter instance (e.g. na1) for the for Event Monitoring source or
 #prompt the user to enter the date for the logs they want to download for the source (Event Monitoring) org
 read -p "Please enter logdate (e.g. Yesterday, Last_Week, Last_n_Days:5) (and press ENTER): " day
 
+#set API version to the proper level to the supported EventTypes listed below
+api_version='v42.0'
+
 #prompt the user to enter the eventType they want to download for the source (Event Monitoring) org
 printf 'What EventType do you want to download?\n'
-printf '1. All 28 event types (Default)\n'
+printf '1. All 45 event types (Default)\n'
 printf '2. API\n'
 printf '3. ApexCallout\n'
 printf '4. ApexExecution\n'
@@ -66,26 +69,43 @@ printf '6. ApexTrigger\n'
 printf '7. AsyncReportRun\n'
 printf '8. BulkApi\n'
 printf '9. ChangeSetOperation\n'
-printf '10. ContentDistribution\n'
-printf '11. ContentDocumentLink\n'
-printf '12. ContentTransfer\n'
-printf '13. Dashboard\n'
-printf '14. DocumentAttachmentDownloads\n'
-printf '15. Login\n'
-printf '16. LoginAs\n'
-printf '17. Logout\n'
-printf '18. MetadataApiOperation\n'
-printf '19. MultiBlockReport\n'
-printf '20. PackageInstall\n'
-printf '21. Report\n'
-printf '22. ReportExport\n'
-printf '23. RestApi\n'
-printf '24. Sandbox\n'
-printf '25. Sites\n'
-printf '26. TimeBasedWorkflow\n'
-printf '27. UITracking\n'
-printf '28. URI\n'
-printf '29. VisualforceRequest\n'
+printf '10. Console\n'
+printf '11. ContentDistribution\n'
+printf '12. ContentDocumentLink\n'
+printf '13. ContentTransfer\n'
+printf '14. Dashboard\n'
+printf '15. DocumentAttachmentDownloads\n'
+printf '16. ExternalCrossOrgCallout\n'
+printf '17. ExternalCustomApexCallout\n'
+printf '18. ExternalOdataCallout\n'
+printf '19. InsecureExternalAssets\n'
+printf '20. KnowledgeArticleView\n'
+printf '21. LightningError\n'
+printf '22. LightningInteraction\n'
+printf '23. LightningPageView\n'
+printf '24. LightningPerformance\n'
+printf '25. Login\n'
+printf '26. LoginAs\n'
+printf '27. Logout\n'
+printf '28. MetadataApiOperation\n'
+printf '29. MultiBlockReport\n'
+printf '30. PackageInstall\n'
+printf '31. PlatformEncryption\n'
+printf '32. QueuedExecution\n'
+printf '33. Report\n'
+printf '34. ReportExport\n'
+printf '35. RestApi\n'
+printf '36. Sandbox\n'
+printf '37. Search\n'
+printf '38. SearchClick\n'
+printf '39. Sites\n'
+printf '40. TimeBasedWorkflow\n'
+printf '41. TransactionSecurity\n'
+printf '42. URI\n'
+printf '43. VisualforceRequest\n'
+printf '44. WaveChange\n'
+printf '45. WaveInteraction\n'
+printf '46. WavePerformance\n'
 
 read eventMenu
 
@@ -118,65 +138,116 @@ case $eventMenu in
           eventType=${eventType:-ChangeSetOperation}
           ;; 
      10)
+          eventType=${eventType:-Console}
+          ;;
+     11)
           eventType=${eventType:-ContentDistribution}
           ;; 
-     11)
+     12)
           eventType=${eventType:-ContentDocumentLink}
           ;; 
-     12)
+     13)
           eventType=${eventType:-ContentTransfer}
           ;; 
-     13)
+     14)
           eventType=${eventType:-Dashboard}
           ;; 
-     14)
+     15)
           eventType=${eventType:-DocumentAttachmentDownloads}
           ;; 
-     15)
+     16)
+          eventType=${eventType:-ExternalCrossOrgCallout}
+          ;;
+     17)
+          eventType=${eventType:-ExternalCustomApexCallout}
+          ;;
+     18)
+          eventType=${eventType:-ExternalOdataCallout}
+          ;;
+     19)
+          eventType=${eventType:-InsecureExternalAssets}
+          ;;
+     20)
+          eventType=${eventType:-KnowledgeArticleView}
+          ;;
+     21)
+          eventType=${eventType:-LightningError}
+          ;;
+     22)
+          eventType=${eventType:-LightningInteraction}
+          ;;
+     23)
+          eventType=${eventType:-LightningPageView}
+          ;;
+     24)
+          eventType=${eventType:-LightningPerformance}
+          ;;          
+     25)
           eventType=${eventType:-Login}
           ;; 
-     16)
+     26)
           eventType=${eventType:-LoginAs}
           ;; 
-     17)
+     27)
           eventType=${eventType:-Logout}
           ;; 
-     18)
+     28)
           eventType=${eventType:-MetadataApiOperation}
           ;; 
-     19)
+     29)
           eventType=${eventType:-MultiBlockReport}
           ;; 
-     20)
+     30)
           eventType=${eventType:-PackageInstall}
           ;; 
-     21)
+     31)
+          eventType=${eventType:-PlatformEncryption}
+          ;;
+     32)
+          eventType=${eventType:-QueuedExecution}
+          ;;
+     33)
           eventType=${eventType:-Report}
           ;; 
-     22)
+     34)
           eventType=${eventType:-ReportExport}
           ;; 
-     23)
+     35)
           eventType=${eventType:-RestApi}
           ;; 
-     24)
+     36)
           eventType=${eventType:-Sandbox}
           ;; 
-     25)
+     37)
+          eventType=${eventType:-Search}
+          ;;
+     38)
+          eventType=${eventType:-SearchClick}
+          ;;
+     39)
           eventType=${eventType:-Sites}
           ;; 
-     26)
+     40)
           eventType=${eventType:-TimeBasedWorkflow}
           ;; 
-     27)
-          eventType=${eventType:-UITracking}
-          ;; 
-     28)
+     41)
+          eventType=${eventType:-TransactionSecurity}
+          ;;
+     42)
           eventType=${eventType:-URI}
           ;; 
-     29)
+     43)
           eventType=${eventType:-VisualforceRequest}
           ;; 
+     44)
+          eventType=${eventType:-WaveChange}
+          ;;
+     45)
+          eventType=${eventType:-WaveInteraction}
+          ;;
+     46)
+          eventType=${eventType:-WavePerformance}
+          ;;
      *)
           eventType=${eventType:-All}
           ;;
@@ -194,11 +265,11 @@ access_token=`curl https://${instance}.salesforce.com/services/oauth2/token -d "
 if [ $eventType == All ]; then
 
     #set elfs to the result of ELF query *without* EventType in query
-    elfs=`curl https://${instance}.salesforce.com/services/data/v32.0/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+    elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
 
 else
     #set elfs to the result of ELF query *with* EventType in query
-    elfs=`curl https://${instance}.salesforce.com/services/data/v32.0/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+    elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
 fi
 
 #set the three variables to the array of Ids, EventTypes, and LogDates which will be used when downloading the files into your local directory
@@ -215,7 +286,7 @@ for i in "${!ids[@]}"; do
     mkdir "${eventTypes[$i]}"
 
     #download files into the ${eventTypes[$i]}-raw directory
-    curl --compressed "https://${instance}.salesforce.com/services/data/v32.0/sobjects/EventLogFile/${ids[$i]}/LogFile" -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1" -o "${eventTypes[$i]}-raw/${eventTypes[$i]}-${logDates[$i]}.csv" 
+    curl --compressed "https://${instance}.salesforce.com/services/data/${api_version}/sobjects/EventLogFile/${ids[$i]}/LogFile" -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1" -o "${eventTypes[$i]}-raw/${eventTypes[$i]}-${logDates[$i]}.csv" 
 
     #convert files into the ${eventTypes[$i]} directory for Salesforce Analytics
     awk -F ','  '{ if(NR==1) printf("%s\n",$0); else{ for(i=1;i<=NF;i++) { if(i>1&& i<=NF) printf("%s",","); if(i == 2) printf "\"%s-%s-%sT%s:%s:%sZ\"", substr($2,2,4),substr($2,6,2),substr($2,8,2),substr($2,10,2),substr($2,12,2),substr($2,14,2); else printf ("%s",$i);  if(i==NF) printf("\n")}}}' "${eventTypes[$i]}-raw/${eventTypes[$i]}-${logDates[$i]}.csv" > "${eventTypes[$i]}/${eventTypes[$i]}-${logDates[$i]}.csv"
