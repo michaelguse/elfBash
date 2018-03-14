@@ -50,14 +50,19 @@ read -p "Please enter logdate (e.g. Yesterday, Last_Week, Last_n_Days:5) (and pr
 #set access_token for OAuth flow 
 #change client_id and client_secret to your own connected app - bit.ly/sfdcConnApp
 access_token=`curl https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1" | jq -r '.access_token'`
+echo ${access_token}
 
 #set elfs to the result of ELF query
-elfs=`curl https://${instance}.salesforce.com/services/data/v32.0/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+elfs=`curl https://${instance}.salesforce.com/services/data/v41.0/query?q=Select+Id+,+EventType+,+LogDate+From+EventLogFile+Where+LogDate+=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+echo ${elfs}
 
 #set the three variables to the array of Ids, EventTypes, and LogDates which will be used when downloading the files into your directory
 ids=( $(echo ${elfs} | jq -r ".records[].Id") )
+echo ${ids}
 eventTypes=( $(echo ${elfs} | jq -r ".records[].EventType") )
+echo ${eventTypes}
 logDates=( $(echo ${elfs} | jq -r ".records[].LogDate" | sed 's/'T.*'//' ) )
+echo ${logDates}
 
 #loop through the array of results and download each file with the following naming convention: EventType-LogDate.csv
 for i in "${!ids[@]}"; do
@@ -66,5 +71,5 @@ for i in "${!ids[@]}"; do
     mkdir "${logDates[$i]}"
 
     #download files into the logDate directory
-    curl --compressed "https://${instance}.salesforce.com/services/data/v32.0/sobjects/EventLogFile/${ids[$i]}/LogFile" -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1" -o "${logDates[$i]}/${eventTypes[$i]}-${logDates[$i]}.csv"
+    curl --compressed "https://${instance}.salesforce.com/services/data/v41.0/sobjects/EventLogFile/${ids[$i]}/LogFile" -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1" -o "${logDates[$i]}/${eventTypes[$i]}-${logDates[$i]}.csv"
 done
