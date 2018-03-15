@@ -1,0 +1,1112 @@
+{
+  "RegisterVisualforceRequest": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "VisualforceRequestWithUsers",
+      "alias": "VisualforceRequestWithUsers",
+      "source": "AugmentVisualforceRequestUser"
+    }
+  },
+  "ExtractContentObject": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Title"
+        }
+      ],
+      "object": "ContentDocument"
+    }
+  },
+  "ExtractURIFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "URI"
+    }
+  },
+  "ExtractDashboardFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Dashboard"
+    }
+  },
+  "ExtractVisualforceRequestFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "VisualforceRequest"
+    }
+  },
+  "AugmentDashboardReport": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentDashboardName",
+      "left_key": [
+        "REPORT_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "ExtractReportObject",
+      "relationship": "Report"
+    }
+  },
+  "RegisterWaveInteraction": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "WaveInteractionWithUsers",
+      "alias": "WaveInteractionWithUsers",
+      "source": "AugmentWaveInteractionUser"
+    }
+  },
+  "AugmentLoginUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLoginFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "RegisterApexExecution": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ApexExecutionWithUsers",
+      "alias": "ApexExecutionWithUsers",
+      "source": "AugmentApexExecutionUser"
+    }
+  },
+  "ExtractLoginAsFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "LoginAs"
+    }
+  },
+  "RegisterAPI": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "APIWithUsers",
+      "alias": "APIWithUsers",
+      "source": "AugmentAPIUser"
+    }
+  },
+  "AugmentRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractUser",
+      "left_key": [
+        "UserRoleId"
+      ],
+      "right_select": [
+        "Name",
+        "Roles",
+        "RolePath"
+      ],
+      "right": "FlattenRole",
+      "relationship": "Role"
+    }
+  },
+  "RegisterLightningInteraction": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LightningInteractionWithUsers",
+      "alias": "LightningInteractionWithUsers",
+      "source": "AugmentLightningInteractionUser"
+    }
+  },
+  "ExtractDashboardObject": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Title"
+        }
+      ],
+      "object": "Dashboard"
+    }
+  },
+  "RegisterContent": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ContentTransferWithUsers",
+      "alias": "ContentTransferWithUsers",
+      "source": "AugmentContentUser"
+    }
+  },
+  "AugmentLightningInteractionUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLightningInteractionFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "RegisterReportExport": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ReportExportWithUsers",
+      "alias": "ReportExportWithUsers",
+      "source": "AugmentReportExportUser"
+    }
+  },
+  "RegisterLightningError": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LightningErrorWithUsers",
+      "alias": "LightningErrorWithUsers",
+      "source": "AugmentLightningErrorUser"
+    }
+  },
+  "FlattenRole": {
+    "action": "flatten",
+    "parameters": {
+      "self_field": "Id",
+      "multi_field": "Roles",
+      "parent_field": "ParentRoleId",
+      "path_field": "RolePath",
+      "source": "ExtractRole"
+    }
+  },
+  "AugmentReportName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractReportFile",
+      "left_key": [
+        "REPORT_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name"
+      ],
+      "right": "ExtractReportObject",
+      "relationship": "Report"
+    }
+  },
+  "ExtractReportExportFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ReportExport"
+    }
+  },
+  "AugmentURIUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractURIFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentApexExecutionUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractApexExecutionFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractWaveChangeFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "WaveChange"
+    }
+  },
+  "RegisterRestApi": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "RestApiWithUsers",
+      "alias": "RestApiWithUsers",
+      "source": "AugmentRestApiUser"
+    }
+  },
+  "ExtractProfile": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "PermissionsModifyAllData"
+        },
+        {
+          "name": "PermissionsCustomizeApplication"
+        },
+        {
+          "name": "PermissionsViewAllData"
+        },
+        {
+          "name": "PermissionsViewSetup"
+        },
+        {
+          "name": "PermissionsManageUsers"
+        }
+      ],
+      "object": "Profile"
+    }
+  },
+  "ExtractReportFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Report"
+    }
+  },
+  "AugmentWaveChangeUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractWaveChangeFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentVisualforceRequestUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractVisualforceRequestFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentReportExportUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractReportExportFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractWavePerformanceFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "WavePerformance"
+    }
+  },
+  "RegisterWaveChange": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "WaveChangeWithUsers",
+      "alias": "WaveChangeWithUsers",
+      "source": "AugmentWaveChangeUser"
+    }
+  },
+  "AugmentContentName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractContentFile",
+      "left_key": [
+        "DOCUMENT_ID_DERIVED"
+      ],
+      "right_select": [
+        "Title"
+      ],
+      "right": "ExtractContentObject",
+      "relationship": "Content"
+    }
+  },
+  "AugmentLoginAsUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLoginAsFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractSATObject": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "filterConditions": [
+        {
+          "field": "CreatedDate",
+          "value": "Last_n_days:7",
+          "operator": "="
+        }
+      ],
+      "enablePKChunking": false,
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Action"
+        },
+        {
+          "name": "CreatedById"
+        },
+        {
+          "name": "CreatedDate"
+        },
+        {
+          "name": "DelegateUser"
+        },
+        {
+          "name": "Display"
+        },
+        {
+          "name": "Section"
+        }
+      ],
+      "object": "SetupAuditTrail"
+    }
+  },
+  "RegisterUsers": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Users",
+      "alias": "Users",
+      "source": "AugmentUser"
+    }
+  },
+  "ExtractLightningPageViewFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "LightningPageView"
+    }
+  },
+  "RegisterLightningPerformance": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LightningPerformanceWithUsers",
+      "alias": "LightningPerformanceWithUsers",
+      "source": "AugmentLightningPerformanceUser"
+    }
+  },
+  "AugmentWavePerformanceUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractWavePerformanceFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentProfile": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractUser",
+      "left_key": [
+        "ProfileId"
+      ],
+      "right_select": [
+        "Name",
+        "PermissionsModifyAllData",
+        "PermissionsCustomizeApplication",
+        "PermissionsViewAllData",
+        "PermissionsViewSetup",
+        "PermissionsManageUsers"
+      ],
+      "right": "ExtractProfile",
+      "relationship": "Profile"
+    }
+  },
+  "RegisterWavePerformance": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "WavePerformanceWithUsers",
+      "alias": "WavePerformanceWithUsers",
+      "source": "AugmentWavePerformanceUser"
+    }
+  },
+  "RegisterReport": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "ReportWithUsers",
+      "alias": "ReportWithUsers",
+      "source": "AugmentReportUser"
+    }
+  },
+  "RegisterLightningPageView": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LightningPageViewWithUsers",
+      "alias": "LightningPageViewWithUsers",
+      "source": "AugmentLightningPageViewUser"
+    }
+  },
+  "AugmentDashboardUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentDashboardReport",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentLightningErrorUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLightningErrorFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentAPIUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractAPIFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractRestApiFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "RestApi"
+    }
+  },
+  "ExtractContentFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ContentTransfer"
+    }
+  },
+  "AugmentLightningPerformanceUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLightningPerformanceFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractLoginFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Login"
+    }
+  },
+  "ExtractUser": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "FirstName"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CompanyName"
+        },
+        {
+          "name": "Division"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "Street"
+        },
+        {
+          "name": "City"
+        },
+        {
+          "name": "State"
+        },
+        {
+          "name": "PostalCode"
+        },
+        {
+          "name": "Country"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "Alias"
+        },
+        {
+          "name": "CommunityNickname"
+        },
+        {
+          "name": "UserType"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "ProfileId"
+        },
+        {
+          "name": "IsActive"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "ExtractLightningPerformanceFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "LightningPerformance"
+    }
+  },
+  "RegisterLogin": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LoginWithUsers",
+      "alias": "LoginWithUsers",
+      "source": "AugmentLoginUser"
+    }
+  },
+  "RegisterSAT": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "SetupAuditTrailWithUsers",
+      "alias": "SetupAuditTrailWithUsers",
+      "source": "AugmentSATUser"
+    }
+  },
+  "ExtractWaveInteractionFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "WaveInteraction"
+    }
+  },
+  "ExtractReportObject": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        }
+      ],
+      "object": "Report"
+    }
+  },
+  "ExtractLightningErrorFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "LightningError"
+    }
+  },
+  "ExtractApexExecutionFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "ApexExecution"
+    }
+  },
+  "RegisterDashboard": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "DashboardWithUsers",
+      "alias": "DashboardWithUsers",
+      "source": "AugmentDashboardUser"
+    }
+  },
+  "AugmentReportUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentReportName",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "RegisterURI": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "URIWithUsers",
+      "alias": "URIWithUsers",
+      "source": "AugmentURIUser"
+    }
+  },
+  "AugmentSATUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractSATObject",
+      "left_key": [
+        "CreatedById"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Profile.PermissionsModifyAllData",
+        "Profile.PermissionsCustomizeApplication",
+        "Profile.PermissionsViewAllData",
+        "Profile.PermissionsViewSetup",
+        "Profile.PermissionsManageUsers",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractAPIFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "API"
+    }
+  },
+  "AugmentDashboardName": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractDashboardFile",
+      "left_key": [
+        "DASHBOARD_ID_DERIVED"
+      ],
+      "right_select": [
+        "Title"
+      ],
+      "right": "ExtractDashboardObject",
+      "relationship": "Dashboard"
+    }
+  },
+  "ExtractLightningInteractionFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "LightningInteraction"
+    }
+  },
+  "AugmentWaveInteractionUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractWaveInteractionFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "ExtractRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ParentRoleId"
+        },
+        {
+          "name": "RollupDescription"
+        },
+        {
+          "name": "OpportunityAccessForAccountOwner"
+        },
+        {
+          "name": "CaseAccessForAccountOwner"
+        },
+        {
+          "name": "ContactAccessForAccountOwner"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "PortalAccountId"
+        },
+        {
+          "name": "PortalType"
+        },
+        {
+          "name": "PortalAccountOwnerId"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "AugmentRestApiUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractRestApiFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentProfile",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Role.Name"
+      ],
+      "right": "AugmentRole",
+      "relationship": "User"
+    }
+  },
+  "AugmentLightningPageViewUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractLightningPageViewFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "AugmentContentUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentContentName",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "RegisterLoginAs": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "LoginAsWithUsers",
+      "alias": "LoginAsWithUsers",
+      "source": "AugmentLoginAsUser"
+    }
+  }
+}

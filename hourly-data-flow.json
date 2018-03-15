@@ -1,0 +1,256 @@
+{
+  "ExtractUser": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Username"
+        },
+        {
+          "name": "LastName"
+        },
+        {
+          "name": "FirstName"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "CompanyName"
+        },
+        {
+          "name": "Division"
+        },
+        {
+          "name": "Department"
+        },
+        {
+          "name": "Street"
+        },
+        {
+          "name": "City"
+        },
+        {
+          "name": "State"
+        },
+        {
+          "name": "PostalCode"
+        },
+        {
+          "name": "Country"
+        },
+        {
+          "name": "Title"
+        },
+        {
+          "name": "Alias"
+        },
+        {
+          "name": "CommunityNickname"
+        },
+        {
+          "name": "UserType"
+        },
+        {
+          "name": "UserRoleId"
+        },
+        {
+          "name": "ProfileId"
+        },
+        {
+          "name": "IsActive"
+        }
+      ],
+      "object": "User"
+    }
+  },
+  "ExtractProfile": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "PermissionsModifyAllData"
+        },
+        {
+          "name": "PermissionsCustomizeApplication"
+        },
+        {
+          "name": "PermissionsViewAllData"
+        },
+        {
+          "name": "PermissionsViewSetup"
+        },
+        {
+          "name": "PermissionsManageUsers"
+        }
+      ],
+      "object": "Profile"
+    }
+  },
+  "ExtractRole": {
+    "action": "sfdcDigest",
+    "parameters": {
+      "fields": [
+        {
+          "name": "Id"
+        },
+        {
+          "name": "Name"
+        },
+        {
+          "name": "ParentRoleId"
+        },
+        {
+          "name": "RollupDescription"
+        },
+        {
+          "name": "OpportunityAccessForAccountOwner"
+        },
+        {
+          "name": "CaseAccessForAccountOwner"
+        },
+        {
+          "name": "ContactAccessForAccountOwner"
+        },
+        {
+          "name": "LastModifiedDate"
+        },
+        {
+          "name": "LastModifiedById"
+        },
+        {
+          "name": "SystemModstamp"
+        },
+        {
+          "name": "DeveloperName"
+        },
+        {
+          "name": "PortalAccountId"
+        },
+        {
+          "name": "PortalType"
+        },
+        {
+          "name": "PortalAccountOwnerId"
+        }
+      ],
+      "object": "UserRole"
+    }
+  },
+  "AugmentProfile": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractUser",
+      "left_key": [
+        "ProfileId"
+      ],
+      "right_select": [
+        "Name",
+        "PermissionsModifyAllData",
+        "PermissionsCustomizeApplication",
+        "PermissionsViewAllData",
+        "PermissionsViewSetup",
+        "PermissionsManageUsers"
+      ],
+      "right": "ExtractProfile",
+      "relationship": "Profile"
+    }
+  },
+  "FlattenRole": {
+    "action": "flatten",
+    "parameters": {
+      "self_field": "Id",
+      "multi_field": "Roles",
+      "parent_field": "ParentRoleId",
+      "path_field": "RolePath",
+      "source": "ExtractRole"
+    }
+  },
+  "AugmentRole": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractUser",
+      "left_key": [
+        "UserRoleId"
+      ],
+      "right_select": [
+        "Name",
+        "Roles",
+        "RolePath"
+      ],
+      "right": "FlattenRole",
+      "relationship": "Role"
+    }
+  },
+  "AugmentUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "AugmentProfile",
+      "left_key": [
+        "Id"
+      ],
+      "right_select": [
+        "Role.Name"
+      ],
+      "right": "AugmentRole",
+      "relationship": "User"
+    }
+  },
+  "ExtractHourlyLightningPageViewFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "HourlyLightningPageView"
+    }
+  },
+  "AugmentHourlyLightningPageViewUser": {
+    "action": "augment",
+    "parameters": {
+      "right_key": [
+        "Id"
+      ],
+      "left": "ExtractHourlyLightningPageViewFile",
+      "left_key": [
+        "USER_ID_DERIVED"
+      ],
+      "right_select": [
+        "Name",
+        "Username",
+        "User.Role.Name",
+        "Profile.Name",
+        "Division",
+        "Department",
+        "City",
+        "Country",
+        "IsActive"
+      ],
+      "right": "AugmentUser",
+      "relationship": "User"
+    }
+  },
+  "RegisterHourlyLightningPageView": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "HourlyLightningPageViewWithUsers",
+      "alias": "HourlyLightningPageViewWithUsers",
+      "source": "AugmentHourlyLightningPageViewUser"
+    }
+  }
+}
