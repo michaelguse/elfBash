@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "timemachine-195013",
+  "private_key_id": "932dc386349394500fc71139b661c23c0c385553",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDzMA67gIR0n+hg\n6vU2C5uj5mXkrFx40r7mfAlripvp6pQm2UoQAW4KiF0c4KbWqmp71Olye49f+ZNf\nx6L+nLC3NhMlV9qifqidOoBoN8e9miApD4f/Fq1uoVpk9n1YsS23Eh8gNqjIX1td\nRC969ud+EIjiwhUPGNXjrWiSKV9OH/BcV6pUkNm8t+eF1i0PhRO3PQloe6X4M9dH\nbfYvWl5qfyZeb3qT1h86kyJnT289yep9aeUeBJell0lrhAMXkjOq7nGkEtEr1Npi\n19MErMPL4yBwsP+JQElgUNNcCBvnTMLY5b6Xz5GGfzxcl4yIXTCO4m9pHllFApLj\nOYz4KaszAgMBAAECggEAQHkqPr244C6Q7jj8n8J+Ffr8Yp7ruUCuSe7ylGdgJKkD\ndDVBdHLcmMBEZ2aL9PejWYc+CRMHFPvW/Zqw9O3X0ArvEoRzO4d27pBXAMphEzxs\ncFZkyNVbT6xJieDrpHr80r9kLycuokjdsSFlsSUKhJqfn/aynJkKA92yjqWXVd+P\niB2A9/jNCv95x+XOanyFEHK/Gic/4i/tl8qbizfdQE1tMbdvLeLdI5NN3x+whu5w\nOcmZDoiTLXWV9UNByQXZc/5y1fBcge+zCQz+I+LouteEE1OFin6cn5AkPqguV2MN\n8TiYFxMZ0qOICgE2wsKcmwhw7NmRxROGUyWh9CrjOQKBgQD+GIGQTQqsRuuU4GSB\n5+9wxscJwSZm5C9TWEjwK0/ebi4b6lW/Vj5EXVlxQsBpTgrKGB1ogIJLY1fbJzrG\n29dKGxVsxtGU3NgiBZ+WQdG+t4QZr2oqFDvqpeMkpwqBie+PPdBAG4nSql5JWSrY\nrhEZs5TQP79+sQFO5Ba3oVJIrwKBgQD1Ap+7kFxGPtGSQukNUluTv8xFkSsMV96f\njKkuTPPganxsskwjJ0kaMscwXOwHNY5PpMoUgRQBO9PLSJXOY3zCE904fGCJ0Zlx\ntFcd2fUatmUzeXSOBv9YFKlqiV9NjIkxIF90B4EQvVCpf5y5N1m6NzZIswVwnib2\nqebOatKevQKBgQD9rk28WY5sTSnqKtVtdLfy6iHRNUs3sl0lYqD/Vt6YfXv/Vsdh\nDaOA8YnYsAIVoFrZRZYmvRZYWche/h2KZ/XbAIs1XJHlg08tOFwJ0ZCsTd/PHPhr\nJmRjclcCQtsUVTgc1GPTfSrubjVQGXvTdIWSGV5bQynWPLXHo6SilKbn9QKBgQC8\nXzcWCwiWzWdtT1pE7sQP1Y+lENaLF+fGvWu5eFqseNKO84pMIME4jj/M9DRX2po+\nq5DesNsDk87jZTwgQSdDQ+h6rE3AyFB0NlYgUln7Hq6yI7g0Fjctrj0O9u05/0nf\nZmddGwPlLdidaMrDMEYhQJ/Qxyrwifek/72/iCvE9QKBgQCyk11bJtM9VQAftuCQ\nZTodcudochhV9R75Jssn7+RcKo1PGa6mIw2ZxOyklqYXHc7M8QHrx4hTz2YjRtzg\nufYYyw0SPoo79Wvm0kbgegN4TLOhyA65YGlHJmOr0hqnOBvaT8xUdaWcx7BG8TAN\nbo1qTXqEWWKAvmJzf8aRUE4USw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sfdc-event-monitor-log-sync@timemachine-195013.iam.gserviceaccount.com",
+  "client_id": "110094681581766108025",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sfdc-event-monitor-log-sync%40timemachine-195013.iam.gserviceaccount.com"
+}
