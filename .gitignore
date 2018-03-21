@@ -1,6 +1,12 @@
 node_modules
-node_modules/*
 eventlogs
-eventlogs/*
-
 Timemachine-932dc3863493
+
+# Local development
+*.env
+*.dev
+*.log
+.DS_Store
+.eslintrc.js
+.sass-cache
+/html
