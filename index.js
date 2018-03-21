@@ -31,21 +31,24 @@ app.get('/getAccessToken', function(req,res) {
     });
     const conn = new jsforce.Connection({ oauth2 : oauth2 });
     conn.authorize(req.query.code, function(err, userInfo) {
-      if (err) {
-        return console.error(err);
-      }
-      const conn2 = new jsforce.Connection({
-        instanceUrl : conn.instanceUrl,
-        accessToken : conn.accessToken
-      });
-      conn2.identity(function(err, res) {
         if (err) { return console.error(err); }
-        console.log("user ID: " + res.user_id);
-        console.log("organization ID: " + res.organization_id);
-        console.log("username: " + res.username);
-        console.log("display name: " + res.display_name);
-      });
+        const conn2 = new jsforce.Connection({
+            instanceUrl : conn.instanceUrl,
+            accessToken : conn.accessToken
+        });
+        console.log("InstanceUrl: " + conn.instanceUrl);
+        console.log("AccessToken: " + conn.accessToken);
+        console.log("UserInfo: " + userInfo);
+
+        conn2.identity(function(err, res) {
+            if (err) { return console.error(err); }
+            console.log("user ID: " + res.user_id);
+            console.log("organization ID: " + res.organization_id);
+            console.log("username: " + res.username);
+            console.log("display name: " + res.display_name);
+        });
     });
+    res.send('getAccessToken page completed successfully!');
 });
 
 // Bind app to port
