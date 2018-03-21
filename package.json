@@ -1,0 +1,28 @@
+{
+  "name": "elfBash",
+  "version": "1.0.0",
+  "description": "tbd",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^1.6.0",
+    "express": "^4.16.3",
+    "jsforce": "^1.8.1",
+    "npm": "^5.7.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelguse/elfBash.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelguse/elfBash/issues"
+  },
+  "homepage": "https://github.com/michaelguse/elfBash#readme"
+}

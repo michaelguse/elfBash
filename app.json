@@ -1,0 +1,7 @@
+{
+    "name": "Allegis ELF Import Process",
+    "description": "A simple app to allow event log file extraction from Salesforce, archiving in Google Bucket and upload into Einstein Analytics",
+    "repository": "https://github.com/michaelguse/elfBash.git",
+    "keywords": ["node", "express", "heroku", "event", "log", "salesforce", "files", "google", "einstein", "analytics"],
+    "image": "heroku/nodejs"
+  }
