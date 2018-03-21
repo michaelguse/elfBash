@@ -1,13 +1,6 @@
 // Enable jsforce package for this app
 const jsforce = require('jsforce');
 
-const oauth2 = new jsforce.OAuth2({
-    loginUrl: process.env.LOGIN_URL,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET_ID,
-    redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
-});
-
 // Configure express to be used for this app
 var express = require('express');
 var app = express();
@@ -16,14 +9,26 @@ app.set('port', (process.env.PORT || 5000));
 
 // Configure routes for this app
 app.get('/', function (req, res) {
-  res.send('This will be the future home of the automation process for event log file extraction, archiving and upload to Einstein Analytics!');
+    res.send('This will be the future home of the automation process for event log file extraction, archiving and upload to Einstein Analytics!');
 });
 
 app.get('/oauth2/auth', function(req, res) {
+    const oauth2 = new jsforce.OAuth2({
+        loginUrl: process.env.LOGIN_URL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET_ID,
+        redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
+    });
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
  
 app.get('/getAccessToken', function(req,res) {
+    const oauth2 = new jsforce.OAuth2({
+        loginUrl: process.env.LOGIN_URL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET_ID,
+        redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
+    });
     const conn = new jsforce.Connection({ oauth2 : oauth2 });
     conn.authorize(req.query.code, function(err, userInfo) {
       if (err) {
