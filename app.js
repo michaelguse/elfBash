@@ -4,6 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '5000');
+app.set('port', port);
+
 // Enable jsforce package for this app
 const jsforce = require('jsforce');
 
