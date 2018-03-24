@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+// Enable jsforce package for this app
+const jsforce = require('jsforce');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
