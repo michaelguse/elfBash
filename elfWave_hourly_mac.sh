@@ -333,7 +333,7 @@ do
     output_file="Hourly$j.csv"
     count=0
 
-    for f in `ls $j/*.csv`
+    for f in `ls eventlogs/Hourly/*_$j.csv`
     do
         echo "still merging [$f]"
             
