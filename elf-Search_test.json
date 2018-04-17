@@ -1,0 +1,16 @@
+{
+  "ExtractSearchFile": {
+    "action": "edgemart",
+    "parameters": {
+      "alias": "Search"
+    }
+  },
+  "RegisterSearch": {
+    "action": "sfdcRegister",
+    "parameters": {
+      "name": "Search",
+      "alias": "Search",
+      "source": "ExtractSearchFile"
+    }
+  }
+}

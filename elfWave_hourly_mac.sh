@@ -36,10 +36,11 @@
  #*/
 
 # Uncomment the environment config file that you are using
-source prod.conf
-#source load.conf
+#source config/prod.conf
+source config/load.conf
 
 #prompt the user to enter the date for the logs they want to download for the source (Event Monitoring) org
+#Sample date: 2018-03-16T13:00:00Z
 read -p "Please enter logdate (e.g. Yesterday, Last_Week, Last_n_Days:5) (and press ENTER): " day
 echo $day
 
@@ -306,6 +307,7 @@ eventTypes=( $(echo ${elfs} | jq -r ".records[].EventType" ) )
 
 #make directory to store the files by date and separate out raw data from 
 #converted timezone data
+mkdir "eventlogs"
 mkdir "eventlogs/${eventInterval}-raw"
 mkdir "eventlogs/${eventInterval}"
 
@@ -327,13 +329,19 @@ done
 #variable to count the number of unique event types
 uEventTypes=( $(echo ${elfs} | jq -r ".records[].EventType" | uniq) )
 
+if [ $eventInterval == "Hourly" ]; then
+    output_file_prefix="Hourly"
+else
+    output_file_prefix=""
+fi
+
 #merge data into single CSV file
 for j in "${uEventTypes[@]}"
 do
-    output_file="Hourly$j.csv"
+    output_file="${output_file_prefix}$j.csv"
     count=0
 
-    for f in `ls eventlogs/Hourly/*_$j.csv`
+    for f in `ls eventlogs/${eventInterval}/*_$j.csv`
     do
         echo "still merging [$f]"
             
