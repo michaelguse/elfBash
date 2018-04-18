@@ -256,14 +256,11 @@ read intervalChoice
 
 case $intervalChoice in 
      1)
-          eventInterval=${eventInterval:-Daily}
-          ;;
+          eventInterval=${eventInterval:-Daily};;
      2)
-          eventInterval=${eventInterval:-Hourly}
-          ;;
+          eventInterval=${eventInterval:-Hourly};;
      *)  
-          echo "$intervalChoice is not a valid option"
-          ;;
+          echo "$intervalChoice is not a valid option";;
 esac
 
 echo ${eventInterval}
@@ -364,7 +361,7 @@ for i in `ls *.csv`; do
     eventName=`echo $i | sed 's/\.csv//g'`
 
     #comment next line to test before uploading to Wave
-    java -jar datasetutils-39.0.1.jar --action load --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName}
+    java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName}
 done
 
 #prompt user to clean up data and directories
@@ -372,9 +369,8 @@ read -p "Do you want to delete data directories and files? (Y/N)" del
 
 if [ $del == Y ] || [ $del == y ] || [ $del == Yes ] || [ $del == yes ]; then
     #clean up data directories
+    rm -r "eventlogs"
     for i in "${!uEventTypes[@]}"; do
-        rm -r "${uEventTypes[$i]}-raw"
-        rm -r "${uEventTypes[$i]}"
         rm "${uEventTypes[$i]}.csv"
     done
     rm -r "archive"
