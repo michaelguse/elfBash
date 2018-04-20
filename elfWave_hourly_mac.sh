@@ -293,9 +293,9 @@ if [ $eventInterval == "Daily" ]; then
 fi 
 
 # Uncomment next line to debug response object from EventLogFile query
-echo ${elfs}
+# echo ${elfs}
 
-#set the three variables to the array of Ids, EventTypes, and LogDates which will be used when downloading the files into your local directory
+#set the variables to the array of Ids, EventTypes, logDates, logHours and LogDates which will be used when downloading the files into your local directory
 ids=( $(echo ${elfs} | jq -r ".records[].Id") )
 logDates=( $(echo ${elfs} | jq -r ".records[].LogDate" | cut -c 1-10 ) )
 logHours=( $(echo ${elfs} | jq -r ".records[].LogDate" | cut -c 12-13 ) )
@@ -361,7 +361,7 @@ for i in `ls *.csv`; do
     eventName=`echo $i | sed 's/\.csv//g'`
 
     #comment next line to test before uploading to Wave
-    java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName}
+    #java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName}
 done
 
 #prompt user to clean up data and directories

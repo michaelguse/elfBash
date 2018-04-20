@@ -3,6 +3,10 @@ var router = express.Router();
 
 // Enable jsforce package for this app
 const jsforce = require('jsforce');
+var request = require('request');
+
+// Imports the Google Cloud client library.
+const Storage = require('@google-cloud/storage');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -45,6 +49,38 @@ router.get('/getAccessToken', function(req,res) {
       });
   });
   res.send('getAccessToken page completed successfully!');
+});
+
+router.get('/dailyArchiveToGoogle', function() {
+    
+    var formData = {
+        // query string
+        q: 'Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+YESTERDAY',
+        // Pass data for Authentication Bearer token and headers
+        auth: {
+            'bearer': accessToken
+        },
+        headers: {
+            'X-PrettyPrint': 1
+        }
+    };
+
+    request({uri: 'https://cs80.salesforce.com/services/data/v42.0/query', 
+            method: "POST",
+            formData: formData
+        },
+        function (error, response, body) {
+            console.log('error:', error); // Print the error if one occurred
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+            console.log('body:', body); // Print the response body.
+            res.render('content', { res_content: body});
+    });
+    
+    //.pipe(fs.createWriteStream('doodle.png'));
+
+    // Creates a client
+    //const storage = new Storage();
+    //fs.createReadStream('file.json').pipe(request.put('http://mysite.com/obj.json'))    
 });
 
 module.exports = router;
