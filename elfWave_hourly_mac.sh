@@ -36,13 +36,24 @@
  #*/
 
 # Uncomment the environment config file that you are using
-#source config/prod.conf
-source config/load.conf
+source config/prod.conf
+# source config/load.conf
+
+# Define what APP the ELF datasets are loaded into
+elfApp='POC'
 
 #prompt the user to enter the date for the logs they want to download for the source (Event Monitoring) org
-#Sample date: 2018-03-16T13:00:00Z
-read -p "Please enter logdate (e.g. Yesterday, Last_Week, Last_n_Days:5) (and press ENTER): " day
-echo $day
+
+# Default date - current datetime minus 24H and assigned to GMT
+default_day=`date -v-24H "+%Y-%m-%dT%H:00:00Z"`
+
+read -p "Use default log date: $default_day (Y/N)" default
+if [ $default == Y ] || [ $default == y ] || [ $default == Yes ] || [ $default == yes ]; then
+    day=$default_day
+elif [ $default == N ] || [ $default == n ] || [ $default == No ] || [ $default == no ]; then
+    read -p "Please enter log date value (e.g. ${default_day} or YESTERDAY, TODAY): " day
+fi
+echo "\nLog data from ${day} onwards.\n"
 
 #set API version to the proper level to the supported EventTypes listed below
 api_version='v42.0'
@@ -302,6 +313,10 @@ logHours=( $(echo ${elfs} | jq -r ".records[].LogDate" | cut -c 12-13 ) )
 sequences=( $(echo ${elfs} | jq -r ".records[].Sequence" ) )
 eventTypes=( $(echo ${elfs} | jq -r ".records[].EventType" ) )
 
+echo "*********************************************************"
+echo "Number of log files selected: ${#ids[@]}"
+echo "*********************************************************"
+
 #make directory to store the files by date and separate out raw data from 
 #converted timezone data
 mkdir "eventlogs"
@@ -360,18 +375,18 @@ for i in `ls *.csv`; do
     eventFile=`echo $i`
     eventName=`echo $i | sed 's/\.csv//g'`
 
-    #comment next line to test before uploading to Wave
-    #java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName}
+    #comment out next line to test before uploading to Wave
+    java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName} --app ${elfApp}
 done
 
 #prompt user to clean up data and directories
-read -p "Do you want to delete data directories and files? (Y/N)" del 
+read -p "Do you want to delete data directories and files? (Y/N)" del
 
 if [ $del == Y ] || [ $del == y ] || [ $del == Yes ] || [ $del == yes ]; then
     #clean up data directories
     rm -r "eventlogs"
     for i in "${!uEventTypes[@]}"; do
-        rm "${uEventTypes[$i]}.csv"
+        rm "${output_file_prefix}${uEventTypes[$i]}.csv"
     done
     rm -r "archive"
     echo "The files were removed."
