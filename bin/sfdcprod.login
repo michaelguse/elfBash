@@ -1,12 +1,9 @@
-# username for the source (Event Monitoring) org
-username=sfdcadmin2@allegisgroup.com.load
-# password for the source (Event Monitoring) org
-password=1310_AL05.maus
-# username for the target (Wave) org
-tUsername=sfdcadmin2@allegisgroup.com.load
-# password for the target (Wave) org
-tPassword=1310_AL05.maus
-# instance end-point for the source (Event Monitoring) org
-instance=cs80
-# endpoint deisgnation for Wave
-endpoint=test
+<?xml version="1.0" encoding="utf-8" ?> 
+<env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+	<env:Body>
+		<n1:login xmlns:n1="urn:partner.soap.sforce.com">
+			<n1:username>sfdcadmin2@allegisgroup.com</n1:username>
+			<n1:password>1310_AL05.maus</n1:password>
+		</n1:login>
+	</env:Body>
+</env:Envelope>
