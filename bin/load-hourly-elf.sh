@@ -126,7 +126,7 @@ source prod.conf
 elfApp='POC'
 
 #set API version to the proper level to the supported EventTypes listed below
-api_version='v42.0'
+api_version='42.0'
 
 #prompt user to clean up data and directories
 del="Y"
@@ -142,7 +142,7 @@ echo ===
 echo === [$(date "+%Y-%m-%d %H:%M:%S")] - Retrieve access token from Salesforce sandbox environment 
 echo ===
 curl $curl_debug \
-  https://login.salesforce.com/services/Soap/u/$api_version \
+  https://login.salesforce.com/services/Soap/u/v${api_version} \
   -H "Content-Type: text/xml; charset=UTF-8" \
   -H "SOAPAction: login" \
   -d @sfdcprod.login \
