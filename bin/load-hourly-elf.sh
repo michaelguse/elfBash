@@ -145,7 +145,7 @@ curl $curl_debug \
   https://login.salesforce.com/services/Soap/u/v${api_version} \
   -H "Content-Type: text/xml; charset=UTF-8" \
   -H "SOAPAction: login" \
-  -d @sfdcprod.login \
+  -d @$HOME/bin/sfdcprod.login \
   > login_response.xml
 
 echo ===
