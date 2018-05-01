@@ -1,2 +1,3 @@
 web: node app.js
-worker: bash test.sh
+worker-lpv: bash load-hourly-elf.sh LightningPageView
+worker-ae: bash load-hourly-elf.sh ApexExecution

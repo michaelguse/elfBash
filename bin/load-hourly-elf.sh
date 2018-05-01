@@ -1,4 +1,9 @@
 #!/bin/bash
+
+echo "************************************************************************"
+echo $(date -u "+%Y-%m-%dT%H:%M:%SZ") - Start of loading log files into Wave 
+echo "************************************************************************"
+
 # Bash script to download EventLogFiles and load them into Wave
 # Pre-requisite: download - http://stedolan.github.io/jq/ to parse JSON
 # Pre-requisite: download datasetutil - http://bit.ly/datasetutil
@@ -35,6 +40,81 @@
  #* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  #*/
 
+if [ $# -ne 1 ]; then
+    echo
+    echo $0: usage: load-hourly-elf eventType
+    echo
+    printf 'Available Event Types:\n'
+    printf '> API\n'
+    printf '> ApexCallout\n'
+    printf '> ApexExecution\n'
+    printf '> ApexSoap\n'
+    printf '> ApexTrigger\n'
+    printf '> AsyncReportRun\n'
+    printf '> BulkApi\n'
+    printf '> ChangeSetOperation\n'
+    printf '> Console\n'
+    printf '> ContentDistribution\n'
+    printf '> ContentDocumentLink\n'
+    printf '> ContentTransfer\n'
+    printf '> Dashboard\n'
+    printf '> DocumentAttachmentDownloads\n'
+    printf '> ExternalCrossOrgCallout\n'
+    printf '> ExternalCustomApexCallout\n'
+    printf '> ExternalOdataCallout\n'
+    printf '> InsecureExternalAssets\n'
+    printf '> KnowledgeArticleView\n'
+    printf '> LightningError\n'
+    printf '> LightningInteraction\n'
+    printf '> LightningPageView\n'
+    printf '> LightningPerformance\n'
+    printf '> Login\n'
+    printf '> LoginAs\n'
+    printf '> Logout\n'
+    printf '> MetadataApiOperation\n'
+    printf '> MultiBlockReport\n'
+    printf '> PackageInstall\n'
+    printf '> PlatformEncryption\n'
+    printf '> QueuedExecution\n'
+    printf '> Report\n'
+    printf '> ReportExport\n'
+    printf '> RestApi\n'
+    printf '> Sandbox\n'
+    printf '> Search\n'
+    printf '> SearchClick\n'
+    printf '> Sites\n'
+    printf '> TimeBasedWorkflow\n'
+    printf '> TransactionSecurity\n'
+    printf '> URI\n'
+    printf '> VisualforceRequest\n'
+    printf '> WaveChange\n'
+    printf '> WaveInteraction\n'
+    printf '> WavePerformance\n'
+    exit 1
+fi
+
+eventType="$1"
+printf 'Event Type selected:\t\t %s\n' ${eventType}
+
+eventInterval="Hourly"
+printf 'Event Interval selected:\t %s\n' ${eventInterval}
+
+
+# Parameters supported for script
+# - eventType (one of 45 available types, provide list of available event types in usage text) - REQUIRED
+# - eventInterval (hourly -h or daily -d) - REQUIRED
+#   optional add numbers to event interval to define interval length
+#   e.g.: -h24 or -h12 or -h6 or -d1 -d3 -d7
+# - startTimestamp (start timestamp from when to import log files, e.g. 2018-04-30T07:00:00Z ) - OPTIONAL
+#   if startTimestamp is used eventInterval does not support optional attribute values
+# - endTimestamp (end timestamp for when to stop importing log files, defaults to empty, which means until now) - OPTIONAL
+#   only available if startTimestamp is used as well
+# - elfApp (target Wave app to write the dataset into, can be empty) - OPTIONAL
+# - targetOrgType (PROD or TEST sandboxes, defaults to PROD) - OPTIONAL
+
+#set API version to the proper level to the supported EventTypes listed below
+api_version='v42.0'
+
 # Uncomment the environment config file that you are using
 source config/prod.conf
 # source config/load.conf
@@ -42,264 +122,40 @@ source config/prod.conf
 # Define what APP the ELF datasets are loaded into
 elfApp='POC'
 
-#prompt the user to enter the date for the logs they want to download for the source (Event Monitoring) org
-
-# Default date - current datetime minus 24H and assigned to GMT
-default_day=`date -v-24H "+%Y-%m-%dT%H:00:00Z"`
-
-read -p "Use default log date: $default_day (Y/N)" default
-if [ $default == Y ] || [ $default == y ] || [ $default == Yes ] || [ $default == yes ]; then
-    day=$default_day
-elif [ $default == N ] || [ $default == n ] || [ $default == No ] || [ $default == no ]; then
-    read -p "Please enter log date value (e.g. ${default_day} or YESTERDAY, TODAY): " day
-fi
-echo "\nLog data from ${day} onwards.\n"
-
 #set API version to the proper level to the supported EventTypes listed below
 api_version='v42.0'
 
-#eventType=''
-#eventInterval=''
+#prompt user to clean up data and directories
+del="Y"
 
-#prompt the user to enter the eventType they want to download for the source (Event Monitoring) org
-printf 'What EventType do you want to download?\n'
-printf '1. All 45 event types\n'
-printf '2. API\n'
-printf '3. ApexCallout\n'
-printf '4. ApexExecution\n'
-printf '5. ApexSoap\n'
-printf '6. ApexTrigger\n'
-printf '7. AsyncReportRun\n'
-printf '8. BulkApi\n'
-printf '9. ChangeSetOperation\n'
-printf '10. Console\n'
-printf '11. ContentDistribution\n'
-printf '12. ContentDocumentLink\n'
-printf '13. ContentTransfer\n'
-printf '14. Dashboard\n'
-printf '15. DocumentAttachmentDownloads\n'
-printf '16. ExternalCrossOrgCallout\n'
-printf '17. ExternalCustomApexCallout\n'
-printf '18. ExternalOdataCallout\n'
-printf '19. InsecureExternalAssets\n'
-printf '20. KnowledgeArticleView\n'
-printf '21. LightningError\n'
-printf '22. LightningInteraction\n'
-printf '23. LightningPageView\n'
-printf '24. LightningPerformance\n'
-printf '25. Login\n'
-printf '26. LoginAs\n'
-printf '27. Logout\n'
-printf '28. MetadataApiOperation\n'
-printf '29. MultiBlockReport\n'
-printf '30. PackageInstall\n'
-printf '31. PlatformEncryption\n'
-printf '32. QueuedExecution\n'
-printf '33. Report\n'
-printf '34. ReportExport\n'
-printf '35. RestApi\n'
-printf '36. Sandbox\n'
-printf '37. Search\n'
-printf '38. SearchClick\n'
-printf '39. Sites\n'
-printf '40. TimeBasedWorkflow\n'
-printf '41. TransactionSecurity\n'
-printf '42. URI\n'
-printf '43. VisualforceRequest\n'
-printf '44. WaveChange\n'
-printf '45. WaveInteraction\n'
-printf '46. WavePerformance\n'
-
-read eventMenu
-
-case $eventMenu in 
-     1)
-          eventType=${eventType:-All}
-          ;;
-     2)
-          eventType=${eventType:-API}
-          ;;
-     3)
-          eventType=${eventType:-ApexCallout}
-          ;; 
-     4)
-          eventType=${eventType:-ApexExecution}
-          ;; 
-     5)
-          eventType=${eventType:-ApexSoap}
-          ;;      
-     6)
-          eventType=${eventType:-ApexTrigger}
-          ;; 
-     7)
-          eventType=${eventType:-AsyncReportRun}
-          ;; 
-     8)
-          eventType=${eventType:-BulkApi}
-          ;; 
-     9)
-          eventType=${eventType:-ChangeSetOperation}
-          ;; 
-     10)
-          eventType=${eventType:-Console}
-          ;;
-     11)
-          eventType=${eventType:-ContentDistribution}
-          ;; 
-     12)
-          eventType=${eventType:-ContentDocumentLink}
-          ;; 
-     13)
-          eventType=${eventType:-ContentTransfer}
-          ;; 
-     14)
-          eventType=${eventType:-Dashboard}
-          ;; 
-     15)
-          eventType=${eventType:-DocumentAttachmentDownloads}
-          ;; 
-     16)
-          eventType=${eventType:-ExternalCrossOrgCallout}
-          ;;
-     17)
-          eventType=${eventType:-ExternalCustomApexCallout}
-          ;;
-     18)
-          eventType=${eventType:-ExternalOdataCallout}
-          ;;
-     19)
-          eventType=${eventType:-InsecureExternalAssets}
-          ;;
-     20)
-          eventType=${eventType:-KnowledgeArticleView}
-          ;;
-     21)
-          eventType=${eventType:-LightningError}
-          ;;
-     22)
-          eventType=${eventType:-LightningInteraction}
-          ;;
-      23)
-           eventType=${eventType:-LightningPageView}
-           ;;
-     24)
-          eventType=${eventType:-LightningPerformance}
-          ;;          
-     25)
-          eventType=${eventType:-Login}
-          ;; 
-     26)
-          eventType=${eventType:-LoginAs}
-          ;; 
-     27)
-          eventType=${eventType:-Logout}
-          ;; 
-     28)
-          eventType=${eventType:-MetadataApiOperation}
-          ;; 
-     29)
-          eventType=${eventType:-MultiBlockReport}
-          ;; 
-     30)
-          eventType=${eventType:-PackageInstall}
-          ;; 
-     31)
-          eventType=${eventType:-PlatformEncryption}
-          ;;
-     32)
-          eventType=${eventType:-QueuedExecution}
-          ;;
-     33)
-          eventType=${eventType:-Report}
-          ;; 
-     34)
-          eventType=${eventType:-ReportExport}
-          ;; 
-     35)
-          eventType=${eventType:-RestApi}
-          ;; 
-     36)
-          eventType=${eventType:-Sandbox}
-          ;; 
-     37)
-          eventType=${eventType:-Search}
-          ;;
-     38)
-          eventType=${eventType:-SearchClick}
-          ;;
-     39)
-          eventType=${eventType:-Sites}
-          ;; 
-     40)
-          eventType=${eventType:-TimeBasedWorkflow}
-          ;; 
-     41)
-          eventType=${eventType:-TransactionSecurity}
-          ;;
-     42)
-          eventType=${eventType:-URI}
-          ;; 
-     43)
-          eventType=${eventType:-VisualforceRequest}
-          ;; 
-     44)  
-          eventType=${eventType:-WaveChange} 
-          ;;
-     45)  
-          eventType=${eventType:-WaveInteraction} 
-          ;;
-     46)  
-          eventType=${eventType:-WavePerformance} 
-          ;;
-      *)  
-          echo "$eventMenu is not a valid option"
-          ;;
-esac
-
-echo ${eventType}
-
-#prompt the user to choose daily or hourly files they want to download for the source (Event Monitoring) org
-printf 'What EventInterval do you choose?\n'
-printf '1. Daily\n'
-printf '2. Hourly\n'
-
-read intervalChoice
-
-case $intervalChoice in 
-     1)
-          eventInterval=${eventInterval:-Daily};;
-     2)
-          eventInterval=${eventInterval:-Hourly};;
-     *)  
-          echo "$intervalChoice is not a valid option";;
-esac
-
-echo ${eventInterval}
+# Default date - current datetime minus 24H and assigned to GMT
+day=`date -v-24H "+%Y-%m-%dT%H:00:00Z"`
+printf 'Event log start TS:\t\t %s\n' ${day}
 
 #set access_token for OAuth flow 
 #change client_id and client_secret to your own connected app - bit.ly/sfdcConnApp
-access_token=`curl https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1" | jq -r '.access_token'`
+access_token=`curl -s https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1" | jq -r '.access_token'`
 
 #uncomment next line if you want to check your access token
-#echo "Access token: ${access_token}"
+echo "Access token: ${access_token}"
 
 if [ $eventInterval == "Hourly" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi
 
 if [ $eventInterval == "Daily" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi 
 
@@ -379,9 +235,6 @@ for i in `ls *.csv`; do
     java -jar datasetutils-39.0.1.jar --action load --endpoint ${endpoint} --u ${tUsername} --p ${tPassword} --inputFile ${eventFile} --dataset ${eventName} --app ${elfApp}
 done
 
-#prompt user to clean up data and directories
-read -p "Do you want to delete data directories and files? (Y/N)" del
-
 if [ $del == Y ] || [ $del == y ] || [ $del == Yes ] || [ $del == yes ]; then
     #clean up data directories
     rm -r "eventlogs"
@@ -396,3 +249,4 @@ elif [ $del == N ] || [ $del == n ] || [ $del == No ] || [ $del == no ]; then
 fi
 
 echo "The script finished successfully."
+exit 0
