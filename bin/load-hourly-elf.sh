@@ -141,18 +141,8 @@ printf 'Event log start TS:\t\t %s\n' ${day}
 echo ===
 echo === [$(date "+%Y-%m-%d %H:%M:%S")] - Retrieve access token from Salesforce sandbox environment 
 echo ===
-curl $curl_debug \
-  https://login.salesforce.com/services/Soap/u/v${api_version} \
-  -H "Content-Type: text/xml; charset=UTF-8" \
-  -H "SOAPAction: login" \
-  -d @$HOME/bin/sfdcprod.login \
-  > login_response.xml
-
-echo "SOAP Login response:"
-echo login_response.xml  
-
-echo ===
-access_token=( $(echo ${login_response.xml} | jq -r '.access_token') )
+access_token=`curl --trace curltrace.txt https://login.salesforce.com/services/Soap/u/v${api_version} -H "Content-Type: text/xml; charset=UTF-8" -H "SOAPAction: login" -d @$HOME/bin/sfdcprod.login | jq -r '.access_token'`
+less curltrace.txt
 
 #login=`curl -v https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
 #access_token=( $(echo ${login} | jq -r '.access_token') )
