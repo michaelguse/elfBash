@@ -135,6 +135,10 @@ printf 'Event log start TS:\t\t %s\n' ${day}
 #set access_token for OAuth flow 
 #change client_id and client_secret to your own connected app - bit.ly/sfdcConnApp
 
+echo "Username: ${username}"
+echo "Password: ${password}"
+echo "Instance: ${instance}"
+
 login=`curl -v https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
 echo "Login SOAP response: ${login}"
 
