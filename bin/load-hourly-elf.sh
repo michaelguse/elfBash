@@ -115,6 +115,9 @@ printf 'Event Interval selected:\t %s\n' ${eventInterval}
 #set API version to the proper level to the supported EventTypes listed below
 api_version='v42.0'
 
+# Debug parameter - can contain -v for verbose CURL logging
+curl_debug='-v'
+
 # Uncomment the environment config file that you are using
 source prod.conf
 # source load.conf
@@ -135,14 +138,22 @@ printf 'Event log start TS:\t\t %s\n' ${day}
 #set access_token for OAuth flow 
 #change client_id and client_secret to your own connected app - bit.ly/sfdcConnApp
 
-echo "Username: ${username}"
-echo "Password: ${password}"
-echo "Instance: ${instance}"
+echo ===
+echo === [$(date "+%Y-%m-%d %H:%M:%S")] - Retrieve access token from Salesforce sandbox environment 
+echo ===
+curl $curl_debug \
+  https://login.salesforce.com/services/Soap/u/$api_version \
+  -H "Content-Type: text/xml; charset=UTF-8" \
+  -H "SOAPAction: login" \
+  -d @sfdcprod.login \
+  > login_response.xml
 
-login=`curl -v https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
-echo "Login SOAP response: ${login}"
+echo ===
+access_token=( $(echo ${login_response.xml} | jq -r '.access_token') )
 
-access_token=( $(echo ${login} | jq -r '.access_token') )
+#login=`curl -v https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
+#access_token=( $(echo ${login} | jq -r '.access_token') )
+
 echo "Access token: ${access_token}"
 
 if [ $eventInterval == "Hourly" ]; then
