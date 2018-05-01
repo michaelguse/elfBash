@@ -126,7 +126,7 @@ source prod.conf
 elfApp='POC'
 
 #set API version to the proper level to the supported EventTypes listed below
-api_version='42.0'
+api_version='v42.0'
 
 #prompt user to clean up data and directories
 del="Y"
@@ -146,20 +146,20 @@ echo "Access token: ${access_token}"
 if [ $eventInterval == "Hourly" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi
 
 if [ $eventInterval == "Daily" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl -s https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi 
 
