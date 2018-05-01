@@ -148,6 +148,9 @@ curl $curl_debug \
   -d @$HOME/bin/sfdcprod.login \
   > login_response.xml
 
+echo "SOAP Login response:"
+echo login_response.xml  
+
 echo ===
 access_token=( $(echo ${login_response.xml} | jq -r '.access_token') )
 
