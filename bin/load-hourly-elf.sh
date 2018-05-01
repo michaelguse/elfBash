@@ -129,7 +129,7 @@ api_version='v42.0'
 del="Y"
 
 # Default date - current datetime minus 24H and assigned to GMT
-day=`date -v-24H "+%Y-%m-%dT%H:00:00Z"`
+day=`date --date='24 hours ago' "+%Y-%m-%dT%H:00:00Z"`
 printf 'Event log start TS:\t\t %s\n' ${day}
 
 #set access_token for OAuth flow 
@@ -160,7 +160,7 @@ if [ $eventInterval == "Daily" ]; then
 fi 
 
 # Uncomment next line to debug response object from EventLogFile query
-# echo ${elfs}
+echo ${elfs} >&2
 
 #set the variables to the array of Ids, EventTypes, logDates, logHours and LogDates which will be used when downloading the files into your local directory
 ids=( $(echo ${elfs} | jq -r ".records[].Id") )
