@@ -116,8 +116,8 @@ printf 'Event Interval selected:\t %s\n' ${eventInterval}
 api_version='v42.0'
 
 # Uncomment the environment config file that you are using
-source ../config/prod.conf
-# source ../config/load.conf
+source prod.conf
+# source load.conf
 
 # Define what APP the ELF datasets are loaded into
 elfApp='POC'
