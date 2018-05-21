@@ -13,7 +13,7 @@ var oauth2 = new jsforce.OAuth2({
     loginUrl: process.env.LOGIN_URL,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET_ID,
-    redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
+    redirectUri: `${process.env.REDIRECT_URI}`
 });
 
 /* GET home page. */
