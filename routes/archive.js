@@ -28,7 +28,8 @@ router.get('/oauth2/auth', function(req, res) {
 
 router.get('/oauth2/callback', function(req,res) {
     var conn = new jsforce.Connection({ oauth2: oauth2 });
-    conn.authorize(req.query.code, function(err, userInfo) {
+    var code = req.query.code;
+    conn.authorize(code, function(err, userInfo) {
         if (err) { return console.error(err); }
 
         console.log('Access Token: ' + conn.accessToken);
