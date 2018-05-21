@@ -9,11 +9,11 @@ var request = require('request');
 const Storage = require('@google-cloud/storage');
 
 // Define OAuth client information
-var oauth2 = new jsforce.OAuth2({
+var oauth = new jsforce.OAuth2({
     loginUrl: process.env.LOGIN_URL,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET_ID,
-    redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
+    redirectUri: `${process.env.REDIRECT_URI}`
 });
 
 /* GET home page. */
@@ -21,13 +21,13 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Daily Archive Router Home Page' });
 });
 
-router.get('/oauth2/auth', function(req, res) {
-    console.log('Redirect URI: ' + oauth2.getAuthorizationUrl({})) 
+router.get('/oauth/auth', function(req, res) {
+    console.log('Redirect URI: ' + oauth.getAuthorizationUrl({})) 
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
-router.get('/getAccessToken', function(req,res) {
-    var conn = new jsforce.Connection({ oauth2: oauth2 });
+router.get('/oauth/getAccessToken', function(req,res) {
+    var conn = new jsforce.Connection({ oauth2: oauth });
     conn.authorize(req.query.code, function(err, userInfo) {
         if (err) { return console.error(err); }
 
