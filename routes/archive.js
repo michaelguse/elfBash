@@ -8,8 +8,8 @@ var request = require('request');
 // Imports the Google Cloud client library.
 const Storage = require('@google-cloud/storage');
 
-// Define OAuth client information
-var oauth = new jsforce.OAuth2({
+// Define OAuth2 client information
+var oauth2 = new jsforce.OAuth2({
     loginUrl: process.env.LOGIN_URL,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET_ID,
@@ -22,12 +22,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/oauth/auth', function(req, res) {
-    console.log('Redirect URI: ' + oauth.getAuthorizationUrl({})) 
+    console.log('Redirect URI: ' + oauth2.getAuthorizationUrl({})) 
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
 router.get('/oauth/getAccessToken', function(req,res) {
-    var conn = new jsforce.Connection({ oauth2: oauth });
+    var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.authorize(req.query.code, function(err, userInfo) {
         if (err) { return console.error(err); }
 
