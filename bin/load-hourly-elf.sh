@@ -116,7 +116,7 @@ printf 'Event Interval selected:\t %s\n' ${eventInterval}
 api_version='v42.0'
 
 # Debug parameter - can contain -v for verbose CURL logging
-curl_debug='-v'
+curl_debug=''
 
 # Uncomment the environment config file that you are using
 source prod.conf
@@ -128,8 +128,8 @@ elfApp='POC'
 #set API version to the proper level to the supported EventTypes listed below
 api_version='v42.0'
 
-#prompt user to clean up data and directories
-del="Y"
+#Setting to clean up data and directories
+del="N"
 
 # Default date - current datetime minus 24H and assigned to GMT
 day=`date --date='24 hours ago' "+%Y-%m-%dT%H:00:00Z"`
@@ -138,7 +138,7 @@ printf 'Event log start TS:\t\t %s\n' ${day}
 #set access_token for OAuth flow 
 #change client_id and client_secret to your own connected app - bit.ly/sfdcConnApp
 
-login=`curl -v https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
+login=`curl $curl_debug https://${instance}.salesforce.com/services/oauth2/token -d "grant_type=password" -d "client_id=3MVG99OxTyEMCQ3ilfR5dFvVjgTrCbM3xX8HCLLS4GN72CCY6q86tRzvtjzY.0.p5UIoXHN1R4Go3SjVPs0mx" -d "client_secret=7899378653052916471" -d "username=${username}" -d "password=${password}" -H "X-PrettyPrint:1"`
 access_token=( $(echo ${login} | jq -r '.access_token') )
 
 echo "Access token: ${access_token}"
@@ -146,20 +146,20 @@ echo "Access token: ${access_token}"
 if [ $eventInterval == "Hourly" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl $curl_debug https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl $curl_debug https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+Sequence+!=+0+AND+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi
 
 if [ $eventInterval == "Daily" ]; then
     if [ $eventType == "All" ]; then
         #set elfs to the result of ELF query *without* EventType in query
-        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl $curl_debug https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day} -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     else
         #set elfs to the result of ELF query *with* EventType in query
-        elfs=`curl -v https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
+        elfs=`curl $curl_debug https://${instance}.salesforce.com/services/data/${api_version}/query?q=Select+Id+,+EventType+,+LogDate,+Sequence+From+EventLogFile+Where+LogDate+%3E=+${day}+AND+EventType+=+\'${eventType}\' -H "Authorization: Bearer ${access_token}" -H "X-PrettyPrint:1"`
     fi
 fi 
 
@@ -187,7 +187,7 @@ mkdir "eventlogs/${eventInterval}"
 for i in "${!ids[@]}"; do
     
     #download files into the ${eventTypes[$i]}-raw directory
-    curl --compressed \
+    curl $curl_debug --compressed \
         "https://${instance}.salesforce.com/services/data/${api_version}/sobjects/EventLogFile/${ids[$i]}/LogFile" \
         -H "Authorization: Bearer ${access_token}" \
         -H "X-PrettyPrint:1" \
