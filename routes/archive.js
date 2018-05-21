@@ -21,12 +21,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Daily Archive Router Home Page' });
 });
 
-router.get('/oauth/auth', function(req, res) {
+router.get('/oauth2/auth', function(req, res) {
     console.log('Redirect URI: ' + oauth2.getAuthorizationUrl({})) 
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
-router.get('/oauth/callback', function(req,res) {
+router.get('/oauth2/callback', function(req,res) {
     var conn = new jsforce.Connection({ oauth2: oauth2 });
     conn.authorize(req.query.code, function(err, userInfo) {
         if (err) { return console.error(err); }
