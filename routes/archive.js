@@ -8,47 +8,57 @@ var request = require('request');
 // Imports the Google Cloud client library.
 const Storage = require('@google-cloud/storage');
 
+// Define OAuth client information
+var oauth2 = new jsforce.OAuth2({
+    loginUrl: process.env.LOGIN_URL,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET_ID,
+    redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
+});
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Daily Archive Router Home Page' });
 });
 
 router.get('/oauth2/auth', function(req, res) {
-  const oauth2 = new jsforce.OAuth2({
-      loginUrl: process.env.LOGIN_URL,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET_ID,
-      redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
-  });
-  res.redirect(oauth2.getAuthorizationUrl({}));
+  res.redirect(oauth2.getAuthorizationUrl({scope: 'api id web'}));
 });
 
 router.get('/getAccessToken', function(req,res) {
-  const oauth2 = new jsforce.OAuth2({
-      loginUrl: process.env.LOGIN_URL,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET_ID,
-      redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
-  });
+    var conn = new jsforce.Connection({ oauth2: oauth2 });
+    conn.authorize(req.query.code, function(err, userInfo) {
+        if (err) { return console.error(err); }
 
-  const conn = new jsforce.Connection({ oauth2 : oauth2 });
-  conn.authorize(req.query.code, function(err, userInfo) {
-      if (err) { return console.error(err); }
+        console.log('Access Token: ' + conn.accessToken);
+        console.log('Instance URL: ' + conn.instanceUrl);
+        console.log('User ID: ' + userInfo.id);
+        console.log('Org ID: ' + userInfo.organizationId);
 
-      const conn2 = new jsforce.Connection({
-          instanceUrl : conn.instanceUrl,
-          accessToken : conn.accessToken
-      });
+        req.session.accessToken = conn.accessToken;
+        req.session.instanceUrl = conn.instanceUrl;
+        res.redirect('/accounts'); 
+    });
+});
 
-      conn2.identity(function(err, res) {
-          if (err) { return console.error(err); }
-          console.log("user ID: " + res.user_id);
-          console.log("organization ID: " + res.organization_id);
-          console.log("username: " + res.username);
-          console.log("display name: " + res.display_name);
-      });
-  });
-  res.send('getAccessToken page completed successfully!');
+router.get('/accounts', function(req, res) {
+    // if auth has not been set, redirect to index
+    if (!req.session.accessToken || !req.session.instanceUrl) { res.redirect('/'); }
+
+    var query = 'SELECT id, name FROM account LIMIT 10';
+    // open connection with client's stored OAuth details
+    var conn = new jsforce.Connection({
+        accessToken: req.session.accessToken,
+        instanceUrl: req.session.instanceUrl
+    });
+
+    conn.query(query, function(err, result) {
+        if (err) {
+            console.error(err);
+            res.redirect('/');
+        }
+        res.render('accounts', {title: 'Accounts List', accounts: result.records});
+    });
 });
 
 router.get('/dailyArchiveToGoogle', function() {
