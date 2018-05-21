@@ -13,7 +13,7 @@ var oauth2 = new jsforce.OAuth2({
     loginUrl: process.env.LOGIN_URL,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET_ID,
-    redirectUri: `${process.env.REDIRECT_URI}`
+    redirectUri: `${req.protocol}://${req.get('host')}/${process.env.REDIRECT_URI}`
 });
 
 /* GET home page. */
@@ -22,7 +22,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/oauth2/auth', function(req, res) {
-  res.redirect(oauth2.getAuthorizationUrl({scope: 'api id web'}));
+    console.log('Redirect URI: ' + oauth2.getAuthorizationUrl({})) 
+    res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
 router.get('/getAccessToken', function(req,res) {
