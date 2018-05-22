@@ -7,8 +7,8 @@
   <body>
     <h1><%= title %></h1>
     <ul>
-      <% accounts.forEach(function(account) { %>
-          <li><%= account.id %> - <%= account.name %></li>
+      <% accounts.forEach(function(r) { %>
+          <li><%= r.name %> (<%= r.id %>)</li>
       <% }); %>
   </ul>
   </body>
