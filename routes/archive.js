@@ -65,7 +65,7 @@ router.get('/accounts', function(req, res) {
         }
         console.log('Query result size: ' + result.totalSize);
         console.log('Query result: ' + result.records);
-        res.render('accounts', {title: 'Accounts List', accounts: result.records});
+        res.render('accounts', {title: 'Accounts List', data: result.records});
     });
 });
 
