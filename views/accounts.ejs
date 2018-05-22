@@ -8,9 +8,7 @@
     <h1><%= title %></h1>
     <ul>
       <%= data.forEach(function(item) { %>
-        <%= item.forEach(function(row) { %>
-          <li><%= row.name %> (<%= row.id %>)</li>
-        <% }); %>
+          <li><%= item.name %> (<%= item.id %>)</li>
       <% }); %>
   </ul>
   </body>
