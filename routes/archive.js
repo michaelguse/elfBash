@@ -22,7 +22,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/oauth2/auth', function(req, res) {
-    console.log('Redirect URI: ' + oauth2.getAuthorizationUrl({})) 
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
