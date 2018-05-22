@@ -32,13 +32,16 @@ router.get('/oauth2/callback', function(req,res) {
     conn.authorize(code, function(err, userInfo) {
         if (err) { return console.error(err); }
 
-        console.log('Access Token: ' + conn.accessToken);
-        console.log('Instance URL: ' + conn.instanceUrl);
+        var token = conn.accessToken;
+        var instURL = conn.instanceUrl;
+
+        console.log('Access Token: ' + token);
+        console.log('Instance URL: ' + instURL);
         console.log('User ID: ' + userInfo.id);
         console.log('Org ID: ' + userInfo.organizationId);
 
-        req.session.accessToken = conn.accessToken;
-        req.session.instanceUrl = conn.instanceUrl;
+        req.session.accessToken = token;
+        req.session.instanceUrl = instURL;
         res.redirect('/accounts'); 
     });
 });
