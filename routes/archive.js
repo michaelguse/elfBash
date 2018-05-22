@@ -1,8 +1,11 @@
 var express = require('express');
+var session = require('express-session');
+
 var router = express.Router();
 
 // Enable jsforce package for this app
 const jsforce = require('jsforce');
+
 var request = require('request');
 
 // Imports the Google Cloud client library.
