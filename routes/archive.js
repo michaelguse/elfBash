@@ -26,7 +26,7 @@ router.get('/oauth2/auth', function(req, res) {
     res.redirect(oauth2.getAuthorizationUrl({}));
 });
 
-router.get('/oauth2/success', function(req,res) {
+router.get('/oauth2/callback', function(req,res) {
     var conn = new jsforce.Connection({ oauth2: oauth2 });
     var code = req.query.code;
     conn.authorize(code, function(err, userInfo) {
