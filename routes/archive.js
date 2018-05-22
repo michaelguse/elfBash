@@ -1,6 +1,4 @@
 var express = require('express');
-var session = require('express-session');
-
 var router = express.Router();
 
 // Enable jsforce package for this app
