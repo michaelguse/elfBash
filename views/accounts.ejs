@@ -7,7 +7,11 @@
   <body>
     <h1><%= title %></h1>
     <ul>
-      <%= data %>
+      <%= data.forEach(function(item) { %>
+        <%= item.forEach(function(row) { %>
+          <li><%= row.name %> (<%= row.id %>)</li>
+        <% }); %>
+      <% }); %>
   </ul>
   </body>
 </html>
