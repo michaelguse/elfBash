@@ -63,7 +63,7 @@ router.get('/accounts', function(req, res) {
             console.error(err);
             res.redirect('/');
         }
-        console.log('Query result: ' + result.records.toString);
+        console.log('Query result: ' + result.records);
         res.render('accounts', {title: 'Accounts List', accounts: result.records});
     });
 });
