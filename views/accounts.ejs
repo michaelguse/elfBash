@@ -7,12 +7,12 @@
   <body>
     <h1><%= title %></h1>
     <div>
-      <% data.foreach(function(r) { %>
+      <% for(var i=0; i < data.length; i++) { %>
          <div>
-           <span><%= r.Id %></span>
-           <span><%= r.Name %></span>
+           <span><%= data[i].Id %></span>
+           <span><%= data[i].Name %></span>
          </div>
-      <% }) %>
-        </div>
+      <% } %>
+    </div>
   </body>
 </html>
